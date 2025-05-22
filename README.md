@@ -1,3 +1,58 @@
+## 🥔 Invoke Method – Simple Event Communication Between Components
+
+To use the `Invoke` method to trigger an event in a **parent component** from a **child component** in a WPF application. 
+
+This is useful when the child needs to notify the parent that something has changed — for example, when a `TextBox` value is updated.
+
+* Defining an **event** in the child (`UpdateTextBoxValue`).
+* **Subscribing** to this event in the parent (`SubscribeToEvents()`).
+* **Calling** `Invoke()` in the child to notify the parent when the event occurs.
+
+This is a clean and decoupled way to allow two components to communicate without directly referencing each other’s logic.
+ 
+### At Parent:
+```csharp
+public void SubscribeToEvents()
+{
+    Beam.UpdateTextBoxValue += TextBox_TextChanged;
+}
+
+private void TextBox_TextChanged()
+{
+    try
+    {
+        var items = TableControl.DataGrid.ItemsSource as List<EnvPanelModel>;
+        viewModel.UpdateTempDatabase(items);
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Error updating JSON file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+
+```
+
+### At Child
+```csharp
+public event Action? UpdateTextBoxValue;
+private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+{
+    try
+    {
+        if (sender is TextBox textBox)
+        {
+            UpdateTextBoxValue?.Invoke();
+        }
+    }
+    catch (Exception ex)
+    {
+        MessageBox.Show($"Error updating item data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+}
+```
+
+---
+
 ## 🥔 CREATE (To Add/Insert data)  
 ```csharp
 var newItem = new EnvAxbimuModel
