@@ -1,3 +1,16 @@
+## 🥔 Update Database Data with EF Core
+```csharp
+public void UpdateDatabaseEFAsync<potato>(IEnumerable<potato> items, string? dbKey = null) where potato : class, IHasId, new()
+{
+    DbHelper.UpdateDatabaseEFAsync(items, dbKey).ConfigureAwait(false);
+}
+public async Task UpdateDatabaseWhereAsync<potato>(Dictionary<string, object> Values, Dictionary<string, object> Where) where potato : class, IHasId, new()
+{
+    await DbHelper.UpdateDatabaseWhereAsync<potato>(Values, Where).ConfigureAwait(false);
+}
+```
+---
+
 ## 🥔 Invoke Method – Simple Event Communication Between Components
 
 To use the `Invoke` method to trigger an event in a **parent component** from a **child component** in a WPF application. 
